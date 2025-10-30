@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { ListaUsuariosComponent } from './pages/lista-usuarios/lista-usuarios.component';
+import { EditarUsuarioComponent } from './pages/editar-usuario/editar-usuario.component';
 
 const routes: Routes = [
   {
@@ -14,6 +16,14 @@ const routes: Routes = [
   {
     path: 'home',
     loadChildren: () => import('./home/home.module').then(m => m.HomePageModule)
+  },
+  {
+    path: 'usuarios',
+    component: ListaUsuariosComponent
+  },
+  {
+    path: 'usuarios/editar/:id',
+    component: EditarUsuarioComponent
   }
 ];
 

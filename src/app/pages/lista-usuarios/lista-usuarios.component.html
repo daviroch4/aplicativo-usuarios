@@ -1,0 +1,44 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Lista de Usuários</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="container">
+    <ion-spinner *ngIf="carregando" name="crescent"></ion-spinner>
+
+    <div *ngIf="!carregando" class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th class="col-id">ID</th>
+            <th>Imagem</th>
+            <th>Nome</th>
+            <th>Sobrenome</th>
+            <th>Email</th>
+            <th>Data de Nascimento</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let usuario of usuarios">
+            <td>{{ usuario.id }}</td>
+            <td>
+              <img [src]="usuario.image" [alt]="usuario.firstName" class="user-image">
+            </td>
+            <td>{{ usuario.firstName }}</td>
+            <td>{{ usuario.lastName }}</td>
+            <td>{{ usuario.email }}</td>
+            <td>{{ formatarData(usuario.birthDate) }}</td>
+            <td>
+              <ion-button size="small" (click)="editarUsuario(usuario.id)">
+                Editar
+              </ion-button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</ion-content>

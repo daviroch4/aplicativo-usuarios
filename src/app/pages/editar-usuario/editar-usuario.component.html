@@ -1,0 +1,85 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-button (click)="voltar()">
+        <ion-icon name="arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Editar Usuário</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="container">
+    <ion-spinner *ngIf="carregando" name="crescent"></ion-spinner>
+
+    <form *ngIf="!carregando" [formGroup]="formulario" (ngSubmit)="salvar()">
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>Dados do Usuário</ion-card-title>
+        </ion-card-header>
+
+        <ion-card-content>
+          <ion-item>
+            <ion-label position="stacked">ID</ion-label>
+            <ion-input formControlName="id" readonly></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Nome *</ion-label>
+            <ion-input formControlName="firstName" placeholder="Digite o nome"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Sobrenome *</ion-label>
+            <ion-input formControlName="lastName" placeholder="Digite o sobrenome"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Email *</ion-label>
+            <ion-input formControlName="email" type="email" placeholder="Digite o email"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Username *</ion-label>
+            <ion-input formControlName="username" placeholder="Digite o username"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Senha *</ion-label>
+            <ion-input formControlName="password" type="password" placeholder="Digite a senha"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Data de Nascimento *</ion-label>
+            <ion-input formControlName="birthDate" type="date"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Tipo Sanguíneo</ion-label>
+            <ion-input formControlName="bloodGroup" placeholder="Ex: A+, O-, AB+"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Altura (cm) *</ion-label>
+            <ion-input formControlName="height" type="number" placeholder="Digite a altura"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Peso (kg) *</ion-label>
+            <ion-input formControlName="weight" type="number" placeholder="Digite o peso"></ion-input>
+          </ion-item>
+
+          <div class="button-container">
+            <ion-button expand="block" type="submit" color="primary">
+              Salvar
+            </ion-button>
+            <ion-button expand="block" type="button" color="medium" (click)="voltar()">
+              Cancelar
+            </ion-button>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </form>
+  </div>
+</ion-content>
