@@ -67,32 +67,18 @@
 
           <ion-item>
             <ion-label position="stacked">Tipo de Atendimento *</ion-label>
-            <ion-select 
-              [value]="formulario.get('tipoAtendimento')?.value"
-              (ionChange)="onTipoAtendimentoChange($event)"
-              placeholder="Selecione o tipo" 
-              interface="alert" 
-              okText="OK" 
-              cancelText="Cancelar">
-              <ion-select-option *ngFor="let tipo of tiposAtendimento" [value]="tipo">
-                {{ tipo }}
-              </ion-select-option>
-            </ion-select>
+            <div class="select-display">{{ formulario.get('tipoAtendimento')?.value || 'Selecione o tipo' }}</div>
+            <ion-button expand="block" fill="outline" (click)="abrirSeletorTipo()">
+              Selecionar Tipo
+            </ion-button>
           </ion-item>
 
           <ion-item>
             <ion-label position="stacked">Status *</ion-label>
-            <ion-select 
-              [value]="formulario.get('status')?.value"
-              (ionChange)="onStatusChange($event)"
-              interface="alert" 
-              okText="OK" 
-              cancelText="Cancelar">
-              <ion-select-option value="futuro">Futuro</ion-select-option>
-              <ion-select-option value="atendido">Atendido</ion-select-option>
-              <ion-select-option value="transferido">Transferido</ion-select-option>
-              <ion-select-option value="cancelado">Cancelado</ion-select-option>
-            </ion-select>
+            <div class="select-display">{{ getTextoStatus(formulario.get('status')?.value) }}</div>
+            <ion-button expand="block" fill="outline" (click)="abrirSeletorStatus()">
+              Selecionar Status
+            </ion-button>
           </ion-item>
 
           <ion-item>

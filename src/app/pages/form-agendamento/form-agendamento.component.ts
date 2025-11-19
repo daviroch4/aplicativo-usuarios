@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, AlertController } from '@ionic/angular';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AgendamentoService } from 'src/app/services/agendamento.service';
@@ -19,6 +19,10 @@ export class FormAgendamentoComponent implements OnInit {
   carregando: boolean = false;
   modoEdicao: boolean = false;
 
+  // Variáveis para exibição
+  tipoAtendimentoTexto: string = 'Selecione o tipo';
+  statusTexto: string = 'Futuro';
+
   tiposAtendimento = [
     'Avaliação Inicial',
     'Fisioterapia Ortopédica',
@@ -35,7 +39,9 @@ export class FormAgendamentoComponent implements OnInit {
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private agendamentoService: AgendamentoService
+    private agendamentoService: AgendamentoService,
+    private cdr: ChangeDetectorRef,
+    private alertController: AlertController
   ) { }
 
   ngOnInit() {
@@ -50,19 +56,19 @@ export class FormAgendamentoComponent implements OnInit {
   }
 
   criarFormulario(): void {
-  this.formulario = this.fb.group({
-    pacienteNome: ['', Validators.required],
-    pacienteTelefone: ['', Validators.required],
-    pacienteRua: ['', Validators.required],
-    pacienteBairro: ['', Validators.required],
-    pacienteCidade: ['', Validators.required],
-    dataAtendimento: ['', Validators.required],
-    horaAtendimento: ['', Validators.required],
-    tipoAtendimento: ['', Validators.required],
-    observacoes: [''],
-    status: ['futuro', Validators.required]
-  });
-}
+    this.formulario = this.fb.group({
+      pacienteNome: ['', Validators.required],
+      pacienteTelefone: ['', Validators.required],
+      pacienteRua: ['', Validators.required],
+      pacienteBairro: ['', Validators.required],
+      pacienteCidade: ['', Validators.required],
+      dataAtendimento: ['', Validators.required],
+      horaAtendimento: ['', Validators.required],
+      tipoAtendimento: ['', Validators.required],
+      observacoes: [''],
+      status: ['futuro', Validators.required]
+    });
+  }
 
   carregarAgendamento(): void {
     if (!this.agendamentoId) return;
@@ -72,6 +78,9 @@ export class FormAgendamentoComponent implements OnInit {
       next: (agendamento) => {
         if (agendamento) {
           this.formulario.patchValue(agendamento);
+          // Atualizar textos de exibição
+          this.tipoAtendimentoTexto = agendamento.tipoAtendimento;
+          this.statusTexto = this.getTextoStatus(agendamento.status);
         }
         this.carregando = false;
       },
@@ -82,23 +91,93 @@ export class FormAgendamentoComponent implements OnInit {
     });
   }
 
-  onTipoAtendimentoChange(event: any): void {
-  const valor = event.detail.value;
-  this.formulario.patchValue({
-    tipoAtendimento: valor
-  });
-  this.formulario.get('tipoAtendimento')?.markAsDirty();
-  console.log('Tipo atendimento alterado para:', valor);
-}
+  async abrirSeletorTipo() {
+    const inputs = this.tiposAtendimento.map(tipo => ({
+      type: 'radio' as const,
+      label: tipo,
+      value: tipo,
+      checked: this.formulario.get('tipoAtendimento')?.value === tipo
+    }));
 
-onStatusChange(event: any): void {
-  const valor = event.detail.value;
-  this.formulario.patchValue({
-    status: valor
-  });
-  this.formulario.get('status')?.markAsDirty();
-  console.log('Status alterado para:', valor);
-}
+    const alert = await this.alertController.create({
+      header: 'Tipo de Atendimento',
+      inputs: inputs,
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel'
+        },
+        {
+          text: 'OK',
+          handler: (valor) => {
+            this.formulario.patchValue({ tipoAtendimento: valor });
+            this.tipoAtendimentoTexto = valor;
+            console.log('Tipo selecionado:', valor);
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
+  async abrirSeletorStatus() {
+    const alert = await this.alertController.create({
+      header: 'Status',
+      inputs: [
+        {
+          type: 'radio',
+          label: 'Futuro',
+          value: 'futuro',
+          checked: this.formulario.get('status')?.value === 'futuro'
+        },
+        {
+          type: 'radio',
+          label: 'Atendido',
+          value: 'atendido',
+          checked: this.formulario.get('status')?.value === 'atendido'
+        },
+        {
+          type: 'radio',
+          label: 'Transferido',
+          value: 'transferido',
+          checked: this.formulario.get('status')?.value === 'transferido'
+        },
+        {
+          type: 'radio',
+          label: 'Cancelado',
+          value: 'cancelado',
+          checked: this.formulario.get('status')?.value === 'cancelado'
+        }
+      ],
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel'
+        },
+        {
+          text: 'OK',
+          handler: (valor) => {
+            this.formulario.patchValue({ status: valor });
+            this.statusTexto = this.getTextoStatus(valor);
+            console.log('Status selecionado:', valor);
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
+  getTextoStatus(status: string): string {
+    const textos: any = {
+      'futuro': 'Futuro',
+      'atendido': 'Atendido',
+      'transferido': 'Transferido',
+      'cancelado': 'Cancelado'
+    };
+    return textos[status] || 'Selecione o status';
+  }
 
   salvar(): void {
     if (this.formulario.invalid) {
