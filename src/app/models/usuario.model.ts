@@ -1,3 +1,12 @@
+export interface Address {
+  address: string;
+  city: string;
+  state: string;
+  stateCode: string;
+  postalCode: string;
+  country: string;
+}
+
 export interface Usuario {
   id: number;
   firstName: string;
@@ -10,6 +19,7 @@ export interface Usuario {
   height: number;
   weight: number;
   image: string;
+  address: Address;
 }
 
 export interface UsuariosResponse {

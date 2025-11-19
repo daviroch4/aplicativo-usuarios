@@ -32,19 +32,27 @@ export class EditarUsuarioComponent implements OnInit {
   }
 
   criarFormulario(): void {
-    this.formulario = this.fb.group({
-      id: [{ value: '', disabled: true }],
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      username: ['', Validators.required],
-      password: ['', Validators.required],
-      birthDate: ['', Validators.required],
-      bloodGroup: [''],
-      height: ['', Validators.required],
-      weight: ['', Validators.required]
-    });
-  }
+  this.formulario = this.fb.group({
+    id: [{ value: '', disabled: true }],
+    firstName: ['', Validators.required],
+    lastName: ['', Validators.required],
+    email: ['', [Validators.required, Validators.email]],
+    username: ['', Validators.required],
+    password: ['', Validators.required],
+    birthDate: ['', Validators.required],
+    bloodGroup: [''],
+    height: ['', Validators.required],
+    weight: ['', Validators.required],
+    address: this.fb.group({
+      address: ['', Validators.required],
+      city: ['', Validators.required],
+      state: ['', Validators.required],
+      stateCode: [''],
+      postalCode: ['', Validators.required],
+      country: ['', Validators.required]
+    })
+  });
+}
 
   carregarUsuario(): void {
     this.carregando = true;

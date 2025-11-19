@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { ListaUsuariosComponent } from './pages/lista-usuarios/lista-usuarios.component';
 import { EditarUsuarioComponent } from './pages/editar-usuario/editar-usuario.component';
+import { ListaAgendamentosComponent } from './pages/lista-agendamentos/lista-agendamentos.component';
+import { FormAgendamentoComponent } from './pages/form-agendamento/form-agendamento.component';
 
 const routes: Routes = [
   {
@@ -24,6 +26,18 @@ const routes: Routes = [
   {
     path: 'usuarios/editar/:id',
     component: EditarUsuarioComponent
+  },
+  {
+    path: 'agendamentos',
+    component: ListaAgendamentosComponent
+  },
+  {
+    path: 'agendamentos/novo',
+    component: FormAgendamentoComponent
+  },
+  {
+    path: 'agendamentos/editar/:id',
+    component: FormAgendamentoComponent
   }
 ];
 

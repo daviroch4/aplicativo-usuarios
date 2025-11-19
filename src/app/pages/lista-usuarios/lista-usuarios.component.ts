@@ -50,6 +50,16 @@ export class ListaUsuariosComponent implements OnInit {
     return `${dia}/${mes}/${ano}`;
   }
 
+  getNomeCompleto(usuario: Usuario): string {
+  return `${usuario.firstName} ${usuario.lastName}`;
+}
+
+getEnderecoCompleto(usuario: Usuario): string {
+  if (!usuario.address) return 'N/A';
+  const addr = usuario.address;
+  return `${addr.address}, ${addr.city}, ${addr.state} - ${addr.postalCode}, ${addr.country}`;
+}
+
   editarUsuario(id: number): void {
     this.router.navigate(['/usuarios/editar', id]);
   }

@@ -1,0 +1,131 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Agendamentos de Fisioterapia</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="novoAgendamento()">
+        <ion-icon slot="icon-only" name="add-circle"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  
+  <!-- Filtros -->
+  <ion-toolbar>
+    <ion-segment [value]="filtroStatus" (ionChange)="filtrarPorStatus($any($event).detail.value)">
+      <ion-segment-button value="todos">
+        <ion-label>Todos</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="futuro">
+        <ion-label>Futuros</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="atendido">
+        <ion-label>Atendidos</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="transferido">
+        <ion-label>Transferidos</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="cancelado">
+        <ion-label>Cancelados</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="container">
+    <ion-spinner *ngIf="carregando" name="crescent"></ion-spinner>
+
+    <!-- Mensagem quando não há agendamentos -->
+    <div *ngIf="!carregando && agendamentosFiltrados.length === 0" class="empty-state">
+      <ion-icon name="calendar-outline" class="empty-icon"></ion-icon>
+      <h2>Nenhum agendamento encontrado</h2>
+      <p>Clique no botão + para criar um novo agendamento</p>
+    </div>
+
+    <!-- Lista de Cards -->
+    <div *ngIf="!carregando && agendamentosFiltrados.length > 0" class="cards-container">
+      <ion-card *ngFor="let agendamento of agendamentosFiltrados" class="agendamento-card">
+        <ion-card-header>
+          <div class="card-header-content">
+            <ion-card-title>{{ agendamento.pacienteNome }}</ion-card-title>
+            <ion-badge [color]="getCorStatus(agendamento.status)">
+              {{ getTextoStatus(agendamento.status) }}
+            </ion-badge>
+          </div>
+        </ion-card-header>
+
+        <ion-card-content>
+          <div class="info-row">
+            <ion-icon name="call-outline"></ion-icon>
+            <span>{{ agendamento.pacienteTelefone }}</span>
+          </div>
+
+          <div class="info-row">
+            <ion-icon name="location-outline"></ion-icon>
+            <span>{{ getEnderecoCompleto(agendamento) }}</span>
+          </div>
+
+          <div class="info-row">
+            <ion-icon name="calendar-outline"></ion-icon>
+            <span>{{ formatarData(agendamento.dataAtendimento) }} às {{ agendamento.horaAtendimento }}</span>
+          </div>
+
+          <div class="info-row">
+            <ion-icon name="fitness-outline"></ion-icon>
+            <span>{{ agendamento.tipoAtendimento }}</span>
+          </div>
+
+          <div *ngIf="agendamento.observacoes" class="info-row">
+            <ion-icon name="document-text-outline"></ion-icon>
+            <span>{{ agendamento.observacoes }}</span>
+          </div>
+
+          <!-- Botões de Ação -->
+          <div class="action-buttons">
+            <ion-button size="small" fill="outline" (click)="editarAgendamento(agendamento.id)">
+              <ion-icon slot="start" name="create-outline"></ion-icon>
+              Editar
+            </ion-button>
+
+            <ion-button 
+              *ngIf="agendamento.status === 'futuro'" 
+              size="small" 
+              color="success" 
+              fill="outline"
+              (click)="atualizarStatus(agendamento.id, 'atendido')">
+              <ion-icon slot="start" name="checkmark-circle-outline"></ion-icon>
+              Atendido
+            </ion-button>
+
+            <ion-button 
+              *ngIf="agendamento.status === 'futuro'" 
+              size="small" 
+              color="warning" 
+              fill="outline"
+              (click)="atualizarStatus(agendamento.id, 'transferido')">
+              <ion-icon slot="start" name="swap-horizontal-outline"></ion-icon>
+              Transferir
+            </ion-button>
+
+            <ion-button 
+              *ngIf="agendamento.status === 'futuro'" 
+              size="small" 
+              color="danger" 
+              fill="outline"
+              (click)="atualizarStatus(agendamento.id, 'cancelado')">
+              <ion-icon slot="start" name="close-circle-outline"></ion-icon>
+              Cancelar
+            </ion-button>
+
+            <ion-button 
+              size="small" 
+              color="danger" 
+              (click)="deletarAgendamento(agendamento.id)">
+              <ion-icon slot="start" name="trash-outline"></ion-icon>
+              Excluir
+            </ion-button>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </div>
+</ion-content>

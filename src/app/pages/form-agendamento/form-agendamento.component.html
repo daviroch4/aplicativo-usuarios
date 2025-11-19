@@ -1,0 +1,122 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-button (click)="voltar()">
+        <ion-icon name="arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>{{ modoEdicao ? 'Editar Agendamento' : 'Novo Agendamento' }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="container">
+    <ion-spinner *ngIf="carregando" name="crescent"></ion-spinner>
+
+    <form *ngIf="!carregando" [formGroup]="formulario" (ngSubmit)="salvar()">
+      <!-- Dados do Paciente -->
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>Dados do Paciente</ion-card-title>
+        </ion-card-header>
+
+        <ion-card-content>
+          <ion-item>
+            <ion-label position="stacked">Nome do Paciente *</ion-label>
+            <ion-input formControlName="pacienteNome" placeholder="Digite o nome completo"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Telefone *</ion-label>
+            <ion-input formControlName="pacienteTelefone" type="tel" placeholder="(00) 00000-0000"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Rua/Avenida *</ion-label>
+            <ion-input formControlName="pacienteRua" placeholder="Nome da rua e número"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Bairro *</ion-label>
+            <ion-input formControlName="pacienteBairro" placeholder="Nome do bairro"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Cidade *</ion-label>
+            <ion-input formControlName="pacienteCidade" placeholder="Nome da cidade"></ion-input>
+          </ion-item>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Dados do Atendimento -->
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>Dados do Atendimento</ion-card-title>
+        </ion-card-header>
+
+        <ion-card-content>
+          <ion-item>
+            <ion-label position="stacked">Data do Atendimento *</ion-label>
+            <ion-input formControlName="dataAtendimento" type="date"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Horário *</ion-label>
+            <ion-input formControlName="horaAtendimento" type="time"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Tipo de Atendimento *</ion-label>
+            <ion-select 
+              [value]="formulario.get('tipoAtendimento')?.value"
+              (ionChange)="onTipoAtendimentoChange($event)"
+              placeholder="Selecione o tipo" 
+              interface="alert" 
+              okText="OK" 
+              cancelText="Cancelar">
+              <ion-select-option *ngFor="let tipo of tiposAtendimento" [value]="tipo">
+                {{ tipo }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Status *</ion-label>
+            <ion-select 
+              [value]="formulario.get('status')?.value"
+              (ionChange)="onStatusChange($event)"
+              interface="alert" 
+              okText="OK" 
+              cancelText="Cancelar">
+              <ion-select-option value="futuro">Futuro</ion-select-option>
+              <ion-select-option value="atendido">Atendido</ion-select-option>
+              <ion-select-option value="transferido">Transferido</ion-select-option>
+              <ion-select-option value="cancelado">Cancelado</ion-select-option>
+            </ion-select>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Observações</ion-label>
+            <ion-textarea 
+              formControlName="observacoes" 
+              placeholder="Informações adicionais sobre o atendimento"
+              rows="4">
+            </ion-textarea>
+          </ion-item>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Botões -->
+      <div class="button-container">
+        <ion-button expand="block" type="submit" color="primary">
+          <ion-icon slot="start" name="checkmark-circle-outline"></ion-icon>
+          {{ modoEdicao ? 'Atualizar' : 'Criar' }} Agendamento
+        </ion-button>
+        <ion-button expand="block" type="button" color="medium" (click)="voltar()">
+          <ion-icon slot="start" name="close-circle-outline"></ion-icon>
+          Cancelar
+        </ion-button>
+      </div>
+    </form>
+  </div>
+</ion-content>

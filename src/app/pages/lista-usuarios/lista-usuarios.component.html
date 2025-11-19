@@ -14,10 +14,10 @@
           <tr>
             <th class="col-id">ID</th>
             <th>Imagem</th>
-            <th>Nome</th>
-            <th>Sobrenome</th>
+            <th>Nome Completo</th>
             <th>Email</th>
             <th>Data de Nascimento</th>
+            <th>Endereço Completo</th>
             <th>Ações</th>
           </tr>
         </thead>
@@ -27,10 +27,10 @@
             <td>
               <img [src]="usuario.image" [alt]="usuario.firstName" class="user-image">
             </td>
-            <td>{{ usuario.firstName }}</td>
-            <td>{{ usuario.lastName }}</td>
+            <td>{{ getNomeCompleto(usuario) }}</td>
             <td>{{ usuario.email }}</td>
             <td>{{ formatarData(usuario.birthDate) }}</td>
+            <td>{{ getEnderecoCompleto(usuario) }}</td>
             <td>
               <ion-button size="small" (click)="editarUsuario(usuario.id)">
                 Editar

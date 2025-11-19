@@ -14,9 +14,10 @@
     <ion-spinner *ngIf="carregando" name="crescent"></ion-spinner>
 
     <form *ngIf="!carregando" [formGroup]="formulario" (ngSubmit)="salvar()">
+      <!-- Dados Pessoais -->
       <ion-card>
         <ion-card-header>
-          <ion-card-title>Dados do Usuário</ion-card-title>
+          <ion-card-title>Dados Pessoais</ion-card-title>
         </ion-card-header>
 
         <ion-card-content>
@@ -69,17 +70,56 @@
             <ion-label position="stacked">Peso (kg) *</ion-label>
             <ion-input formControlName="weight" type="number" placeholder="Digite o peso"></ion-input>
           </ion-item>
-
-          <div class="button-container">
-            <ion-button expand="block" type="submit" color="primary">
-              Salvar
-            </ion-button>
-            <ion-button expand="block" type="button" color="medium" (click)="voltar()">
-              Cancelar
-            </ion-button>
-          </div>
         </ion-card-content>
       </ion-card>
+
+      <!-- Endereço -->
+      <ion-card formGroupName="address">
+        <ion-card-header>
+          <ion-card-title>Endereço</ion-card-title>
+        </ion-card-header>
+
+        <ion-card-content>
+          <ion-item>
+            <ion-label position="stacked">Rua/Avenida *</ion-label>
+            <ion-input formControlName="address" placeholder="Digite o endereço"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Cidade *</ion-label>
+            <ion-input formControlName="city" placeholder="Digite a cidade"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Estado *</ion-label>
+            <ion-input formControlName="state" placeholder="Digite o estado"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Código do Estado</ion-label>
+            <ion-input formControlName="stateCode" placeholder="Ex: RS, SP"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">CEP *</ion-label>
+            <ion-input formControlName="postalCode" placeholder="Digite o CEP"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">País *</ion-label>
+            <ion-input formControlName="country" placeholder="Digite o país"></ion-input>
+          </ion-item>
+        </ion-card-content>
+      </ion-card>
+
+      <div class="button-container">
+        <ion-button expand="block" type="submit" color="primary">
+          Salvar
+        </ion-button>
+        <ion-button expand="block" type="button" color="medium" (click)="voltar()">
+          Cancelar
+        </ion-button>
+      </div>
     </form>
   </div>
 </ion-content>
